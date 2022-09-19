@@ -160,7 +160,14 @@ class LinkedList {
     }
 
     const newNode = new Node(val);
-
+    
+    if(!this.length){
+      this.head = newNode;
+      this.tail = newNode;
+      this.length = 1;
+      return;
+    }
+    
     if(idx === 0){
       const oldHead = this.head;
       this.head = newNode;
@@ -168,6 +175,7 @@ class LinkedList {
       this.length++;
       return;
     }
+    
 
     if(idx === this.length){
       const oldTail = this.tail;
@@ -189,15 +197,53 @@ class LinkedList {
   }
 
   /** removeAt(idx): return & remove item at idx, */
-
   removeAt(idx) {
+    let counter = 0;
+    let current = this.head;
+    if(idx >= this.length || idx < 0 || !this.length){
+      throw new Error();
+    }
 
+    if (idx === 0){
+      return this.shift()
+    }
+    
+    while(counter !== idx - 1 && current.next !== this.tail){
+      counter++;
+      current = current.next;
+    }
+    
+    
+    if(current.next === this.tail){
+      return this.pop()
+    } else {
+      const leftNode = current;
+      const removeNode = current.next
+      const rightNode = removeNode.next;
+  
+      leftNode.next = rightNode;
+      this.length--;
+      return removeNode.val;
+    }
   }
 
   /** average(): return an average of all values in the list */
 
   average() {
-
+    if(!this.length) return 0;
+    
+    let current = this.head;
+    let sum = 0;
+    
+    while(current.next !== null){
+      sum += current.val;
+      current = current.next;
+    }
+    
+    sum += this.tail.val;
+    
+    return sum / (this.length);
+    
   }
 }
 
