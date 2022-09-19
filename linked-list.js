@@ -48,14 +48,15 @@ class LinkedList {
     if (!this.length) {
       this.head = newNode;
       this.tail = newNode;
+      this.length++;
     } else {
       //set new node next is head
       newNode.next = this.head;
       //new new is new head
       this.head = newNode;
+      this.length++;
 
     }
-    this.length++;
 
   }
 
@@ -93,25 +94,98 @@ class LinkedList {
   /** shift(): return & remove first item. */
 
   shift() {
+    //if length = 0 return undefined
+    if(!this.length) return undefined;
+     //if length = 1
+      //set head and tail to null
+      //return original head
+      if(this.length === 1){
+        const oldHead = this.head;
+        this.head = null;
+        this.tail = null
+        this.length = 0;
+        return oldHead.val;
+      } else{
+        const current = this.head;
+        this.head = current.next;
+        this.length--;
+        return current.val;
+      }
 
   }
 
   /** getAt(idx): get val at idx. */
 
   getAt(idx) {
+    let counter = 0;
+    let current = this.head;
+    if(idx >= this.length || idx < 0){
+      throw new Error();
+    }
 
+    while(counter !== idx && current.next !== null){
+      counter++;
+      current = current.next;
+    }
+
+    return current.val;
   }
 
   /** setAt(idx, val): set val at idx to val */
 
   setAt(idx, val) {
+    let counter = 0;
+    let current = this.head;
+    if(idx >= this.length || idx < 0){
+      throw new Error();
+    }
+
+    while(counter !== idx){
+      counter++;
+      current = current.next;
+    }
+
+    current.val=val;
 
   }
 
   /** insertAt(idx, val): add node w/val before idx. */
 
   insertAt(idx, val) {
+    let counter = 0;
+    let current = this.head;
 
+    if(idx < 0){
+      throw new Error();
+    }
+
+    const newNode = new Node(val);
+
+    if(idx === 0){
+      const oldHead = this.head;
+      this.head = newNode;
+      newNode.next = oldHead;
+      this.length++;
+      return;
+    }
+
+    if(idx === this.length){
+      const oldTail = this.tail;
+      this.tail = newNode;
+      oldTail.next = newNode;
+      this.length++;
+      return;
+    }
+
+    while(counter < idx - 1){
+      counter++;
+      current = current.next;
+    }
+
+    const oldNode = current.next;
+    current.next = newNode;
+    newNode.next = oldNode;
+    this.length++;
   }
 
   /** removeAt(idx): return & remove item at idx, */
